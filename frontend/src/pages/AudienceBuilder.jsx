@@ -9,6 +9,8 @@ import {
   ArrowRight,
   Loader2,
   Megaphone,
+  Zap,
+  XCircle,
 } from 'lucide-react';
 
 export default function AudienceBuilder() {
@@ -20,7 +22,7 @@ export default function AudienceBuilder() {
 
   const examplePrompts = [
     'Find customers who spent more than ₹5000',
-    'Customers who haven\'t purchased in 60 days',
+    "Customers who haven't purchased in 60 days",
     'High-value customers from Mumbai with more than 3 orders',
     'Inactive customers who spent less than ₹1000',
   ];
@@ -28,11 +30,9 @@ export default function AudienceBuilder() {
   const handleSegment = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
-
     setLoading(true);
     setError('');
     setResult(null);
-
     try {
       const res = await api.post('/ai/segment', { prompt });
       setResult(res.data);
@@ -44,7 +44,6 @@ export default function AudienceBuilder() {
   };
 
   const handleCreateCampaign = () => {
-    // Navigate to campaign builder with audience data
     navigate('/campaigns', {
       state: {
         audienceFilters: result.filters,
@@ -55,128 +54,211 @@ export default function AudienceBuilder() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-bold text-text-primary">Audience Builder</h1>
-        <p className="text-text-secondary mt-1">
-          Describe your target audience in plain English — AI will find them for you
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem', fontFamily: "'Inter', system-ui, sans-serif" }}>
+
+      {/* Header */}
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px',
+          background: '#FFF7ED', border: '1px solid #FDE68A',
+          borderRadius: '999px', padding: '4px 14px',
+          fontSize: '11px', fontWeight: '600', color: '#B45309',
+          letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem',
+        }}>
+          <Zap style={{ width: '11px', height: '11px' }} />
+          AI-Powered Segmentation
+        </div>
+        <h1 style={{ fontSize: '2rem', fontWeight: '700', color: '#111827', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+          Audience Builder
+        </h1>
+        <p style={{ fontSize: '0.9rem', color: '#6B7280', margin: 0 }}>
+          Describe your target audience in plain English — AI will find them for you.
         </p>
       </div>
 
-      {/* Prompt Input */}
-      <form onSubmit={handleSegment} className="glass-card animate-fade-in delay-1">
-        <div className="flex items-center gap-2 mb-4">
-          <Sparkles className="w-5 h-5 text-accent-indigo" />
-          <span className="font-semibold text-text-primary">AI Audience Finder</span>
-        </div>
+      {/* Prompt card */}
+      <form onSubmit={handleSegment}>
+        <div style={{
+          background: '#FFFFFF', border: '1px solid #E5E7EB',
+          borderRadius: '16px', padding: '1.5rem',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.05)', marginBottom: '1.25rem',
+        }}>
+          {/* Card header */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Sparkles style={{ width: '16px', height: '16px', color: '#4F46E5' }} />
+            </div>
+            <span style={{ fontWeight: '700', color: '#111827', fontSize: '0.95rem' }}>AI Audience Finder</span>
+          </div>
 
-        <div className="relative">
+          {/* Textarea */}
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="input !min-h-[120px] !pr-4"
-            placeholder={"Try: \"Find customers who spent more than ₹5000 and haven't purchased in 60 days\""}
+          placeholder={"Try: \"Find customers who spent more than ₹5000 and haven't purchased in 60 days\""}
+            style={{
+              width: '100%', minHeight: '110px',
+              border: '1px solid #E5E7EB', borderRadius: '10px',
+              padding: '12px 14px', fontSize: '0.9rem', color: '#111827',
+              background: '#FAFAFA', resize: 'vertical', outline: 'none',
+              fontFamily: 'inherit', lineHeight: '1.6', boxSizing: 'border-box',
+              transition: 'border-color 0.2s',
+            }}
+            onFocus={e => e.target.style.borderColor = '#4F46E5'}
+            onBlur={e => e.target.style.borderColor = '#E5E7EB'}
           />
-        </div>
 
-        <div className="flex items-center gap-3 mt-4">
-          <button
-            type="submit"
-            disabled={loading || !prompt.trim()}
-            className="btn-primary"
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <>
-                <Search className="w-4 h-4" />
-                Build Audience
-              </>
-            )}
-          </button>
-          {result && (
+          {/* Action buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '1rem' }}>
             <button
-              type="button"
-              onClick={handleCreateCampaign}
-              className="btn-secondary"
+              type="submit"
+              disabled={loading || !prompt.trim()}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
+                background: loading || !prompt.trim() ? '#9CA3AF' : '#D97706',
+                color: '#FFFFFF', fontWeight: '600', fontSize: '0.875rem',
+                padding: '9px 20px', borderRadius: '999px', border: 'none',
+                cursor: loading || !prompt.trim() ? 'not-allowed' : 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={e => { if (!loading && prompt.trim()) e.currentTarget.style.background = '#B45309'; }}
+              onMouseLeave={e => { if (!loading && prompt.trim()) e.currentTarget.style.background = '#D97706'; }}
             >
-              <Megaphone className="w-4 h-4" />
-              Create Campaign
-              <ArrowRight className="w-3.5 h-3.5" />
+              {loading
+                ? <><Loader2 style={{ width: '15px', height: '15px', animation: 'spin 1s linear infinite' }} /> Finding audience...</>
+                : <><Search style={{ width: '15px', height: '15px' }} /> Build Audience</>
+              }
             </button>
-          )}
-        </div>
 
-        {/* Example prompts */}
-        <div className="mt-5 pt-4 border-t border-border">
-          <p className="text-xs text-text-muted mb-3">Try these examples:</p>
-          <div className="flex flex-wrap gap-2">
-            {examplePrompts.map((example) => (
+            {result && (
               <button
-                key={example}
                 type="button"
-                onClick={() => setPrompt(example)}
-                className="text-xs px-3 py-1.5 rounded-full bg-bg-card border border-border text-text-secondary hover:text-accent-indigo hover:border-accent-indigo/30 transition-all"
+                onClick={handleCreateCampaign}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '7px',
+                  background: '#FFFFFF', color: '#2563EB', fontWeight: '600', fontSize: '0.875rem',
+                  padding: '9px 20px', borderRadius: '999px',
+                  border: '1.5px solid #BFDBFE', cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#EFF6FF'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; }}
               >
-                {example}
+                <Megaphone style={{ width: '15px', height: '15px' }} />
+                Create Campaign
+                <ArrowRight style={{ width: '13px', height: '13px' }} />
               </button>
-            ))}
+            )}
+          </div>
+
+          {/* Example prompts */}
+          <div style={{ marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid #F3F4F6' }}>
+            <p style={{ fontSize: '11px', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '10px' }}>
+              Try an example
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {examplePrompts.map((example) => (
+                <button
+                  key={example}
+                  type="button"
+                  onClick={() => setPrompt(example)}
+                  style={{
+                    fontSize: '0.78rem', padding: '5px 12px', borderRadius: '999px',
+                    background: '#F9FAFB', border: '1px solid #E5E7EB',
+                    color: '#6B7280', cursor: 'pointer', fontFamily: 'inherit',
+                    transition: 'all 0.15s',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = '#4F46E5'; e.currentTarget.style.color = '#4F46E5'; e.currentTarget.style.background = '#EEF2FF'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.color = '#6B7280'; e.currentTarget.style.background = '#F9FAFB'; }}
+                >
+                  {example}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </form>
 
       {/* Error */}
       {error && (
-        <div className="p-4 rounded-xl bg-accent-rose/5 border border-accent-rose/20 text-accent-rose text-sm">
-          {error}
+        <div style={{
+          padding: '1rem 1.25rem', borderRadius: '12px',
+          background: '#FEF2F2', border: '1px solid #FECACA',
+          display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.25rem',
+        }}>
+          <XCircle style={{ width: '18px', height: '18px', color: '#DC2626', flexShrink: 0 }} />
+          <span style={{ fontSize: '0.875rem', color: '#B91C1C' }}>{error}</span>
         </div>
       )}
 
       {/* Results */}
       {result && (
-        <div className="space-y-5 animate-fade-in">
-          {/* Parsed Filters */}
-          <div className="glass-card">
-            <h3 className="font-semibold text-text-primary mb-3 flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-accent-violet" />
-              AI-Parsed Filters
-            </h3>
-            <div className="flex flex-wrap gap-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+
+          {/* AI Parsed Filters */}
+          <div style={{
+            background: '#FFFFFF', border: '1px solid #E5E7EB',
+            borderRadius: '16px', padding: '1.5rem',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+              <div style={{ width: '28px', height: '28px', borderRadius: '7px', background: '#EEF2FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Sparkles style={{ width: '14px', height: '14px', color: '#7C3AED' }} />
+              </div>
+              <span style={{ fontWeight: '700', color: '#111827', fontSize: '0.875rem' }}>AI-Parsed Filters</span>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {Object.entries(result.filters).map(([key, value]) => (
-                <span
-                  key={key}
-                  className="px-3 py-1.5 rounded-lg bg-accent-indigo/10 border border-accent-indigo/20 text-sm text-accent-indigo"
-                >
-                  <span className="font-medium">{key}:</span> {String(value)}
+                <span key={key} style={{
+                  padding: '5px 12px', borderRadius: '8px',
+                  background: '#EEF2FF', border: '1px solid #C7D2FE',
+                  fontSize: '0.8rem', color: '#4338CA',
+                }}>
+                  <strong>{key}:</strong> {String(value)}
                 </span>
               ))}
               {Object.keys(result.filters).length === 0 && (
-                <span className="text-sm text-text-muted">No specific filters detected — showing all customers</span>
+                <span style={{ fontSize: '0.875rem', color: '#9CA3AF' }}>
+                  No specific filters detected — showing all customers
+                </span>
               )}
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="glass-card !p-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent-cyan/10 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-accent-cyan" />
+          {/* Stat cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div style={{
+              background: '#FFFFFF', border: '1px solid #BFDBFE',
+              borderRadius: '14px', padding: '1.25rem 1.5rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Users style={{ width: '20px', height: '20px', color: '#2563EB' }} />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-text-primary">{result.audienceSize}</p>
-                  <p className="text-xs text-text-secondary">Audience Size</p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#111827', margin: '0 0 2px', letterSpacing: '-0.02em' }}>
+                    {result.audienceSize}
+                  </p>
+                  <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: 0, fontWeight: '500' }}>Audience Size</p>
                 </div>
               </div>
             </div>
-            <div className="glass-card !p-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center">
-                  <DollarSign className="w-5 h-5 text-accent-emerald" />
+
+            <div style={{
+              background: '#FFFFFF', border: '1px solid #BBF7D0',
+              borderRadius: '14px', padding: '1.25rem 1.5rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '42px', height: '42px', borderRadius: '11px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <DollarSign style={{ width: '20px', height: '20px', color: '#16A34A' }} />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-text-primary">₹{result.avgSpend.toLocaleString()}</p>
-                  <p className="text-xs text-text-secondary">Avg. Spend</p>
+                  <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#111827', margin: '0 0 2px', letterSpacing: '-0.02em' }}>
+                    ₹{result.avgSpend.toLocaleString()}
+                  </p>
+                  <p style={{ fontSize: '0.75rem', color: '#9CA3AF', margin: 0, fontWeight: '500' }}>Avg. Spend</p>
                 </div>
               </div>
             </div>
@@ -185,28 +267,47 @@ export default function AudienceBuilder() {
           {/* Preview table */}
           {result.preview?.length > 0 && (
             <div>
-              <h3 className="font-semibold text-text-primary mb-3">
-                Audience Preview <span className="text-text-muted font-normal">(showing {result.preview.length} of {result.audienceSize})</span>
-              </h3>
-              <div className="table-container">
-                <table>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '0.75rem' }}>
+                <p style={{ fontSize: '11px', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
+                  Audience Preview
+                </p>
+                <span style={{ fontSize: '0.78rem', color: '#9CA3AF' }}>
+                  showing {result.preview.length} of {result.audienceSize}
+                </span>
+              </div>
+
+              <div style={{
+                background: '#FFFFFF', border: '1px solid #E5E7EB',
+                borderRadius: '14px', overflow: 'hidden',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+              }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
                   <thead>
-                    <tr>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>City</th>
-                      <th>Orders</th>
-                      <th>Total Spent</th>
+                    <tr style={{ background: '#F9FAFB', borderBottom: '1px solid #F3F4F6' }}>
+                      {['Name', 'Email', 'City', 'Orders', 'Total Spent'].map(h => (
+                        <th key={h} style={{
+                          padding: '10px 16px', textAlign: 'left',
+                          fontSize: '11px', fontWeight: '600', color: '#9CA3AF',
+                          textTransform: 'uppercase', letterSpacing: '0.05em',
+                        }}>{h}</th>
+                      ))}
                     </tr>
                   </thead>
                   <tbody>
-                    {result.preview.map((customer) => (
-                      <tr key={customer.id}>
-                        <td className="!text-text-primary font-medium">{customer.name}</td>
-                        <td>{customer.email}</td>
-                        <td>{customer.city || '—'}</td>
-                        <td>{customer.orderCount}</td>
-                        <td className="!text-accent-emerald">₹{customer.totalSpent.toLocaleString()}</td>
+                    {result.preview.map((customer, idx) => (
+                      <tr
+                        key={customer.id}
+                        style={{ borderBottom: idx < result.preview.length - 1 ? '1px solid #F9FAFB' : 'none' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
+                        <td style={{ padding: '11px 16px', fontWeight: '600', color: '#111827' }}>{customer.name}</td>
+                        <td style={{ padding: '11px 16px', color: '#6B7280' }}>{customer.email}</td>
+                        <td style={{ padding: '11px 16px', color: '#6B7280' }}>{customer.city || '—'}</td>
+                        <td style={{ padding: '11px 16px', color: '#374151' }}>{customer.orderCount}</td>
+                        <td style={{ padding: '11px 16px', color: '#16A34A', fontWeight: '600' }}>
+                          ₹{customer.totalSpent.toLocaleString()}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

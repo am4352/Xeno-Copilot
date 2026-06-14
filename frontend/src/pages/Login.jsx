@@ -32,24 +32,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex bg-bg-primary relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-accent-indigo/5 blur-3xl" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-accent-violet/5 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-accent-cyan/3 blur-3xl" />
-      </div>
-
+    <div className="xeno-shell min-h-screen flex relative overflow-hidden">
       {/* Left branding panel (hidden on mobile) */}
       <div className="hidden lg:flex flex-1 flex-col justify-center items-center px-12 relative">
         <div className="animate-fade-in max-w-md">
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center animate-float">
+            <div className="w-14 h-14 rounded-lg gradient-bg flex items-center justify-center animate-float">
               <Sparkles className="w-7 h-7 text-white" />
             </div>
             <div>
               <h1 className="text-4xl font-extrabold gradient-text">Xeno Copilot</h1>
-              <p className="text-text-secondary text-sm mt-1">AI-Native Marketing CRM</p>
+              <p className="text-text-secondary text-sm mt-1">Agentic Marketing Platform</p>
             </div>
           </div>
           
@@ -81,13 +74,13 @@ export default function Login() {
         <div className="w-full max-w-md animate-scale-in">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-10">
-            <div className="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center">
+            <div className="w-12 h-12 rounded-lg gradient-bg flex items-center justify-center">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
             <h1 className="text-3xl font-extrabold gradient-text">Xeno Copilot</h1>
           </div>
 
-          <div className="glass-card animate-pulse-glow">
+          <div className="glass-card">
             <h2 className="text-2xl font-bold text-text-primary mb-2">
               {isRegister ? 'Create Account' : 'Welcome Back'}
             </h2>

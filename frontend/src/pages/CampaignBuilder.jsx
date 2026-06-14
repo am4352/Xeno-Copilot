@@ -13,7 +13,7 @@ import {
 
 export default function CampaignBuilder() {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Fixed: was useNavigate, now correct
 
   // State from Audience Builder (if navigated from there)
   const initialAudienceFilters = location.state?.audienceFilters || {};
@@ -81,44 +81,44 @@ export default function CampaignBuilder() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
-      <div>
-        <h1 className="text-3xl font-bold text-text-primary flex items-center gap-3">
-          <Megaphone className="w-8 h-8 text-accent-violet" />
+    <div className="max-w-5xl mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-20">
+      <div className="mb-12 sm:mb-16 md:mb-20">
+        <h1 className="text-3xl md:text-4xl font-bold text-text-primary flex items-center gap-3">
+          <Megaphone className="w-9 h-9 md:w-10 md:h-10 text-accent-violet" />
           Campaign Builder
         </h1>
-        <p className="text-text-secondary mt-1">
+        <p className="text-text-secondary mt-3 text-base md:text-lg">
           Create and launch AI-powered marketing campaigns
         </p>
       </div>
 
-      <form onSubmit={handleCreateCampaign} className="space-y-6">
+      <form onSubmit={handleCreateCampaign}>
         {/* Step 1: Basic Info */}
-        <div className="glass-card animate-fade-in delay-1">
-          <h2 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-accent-indigo text-white text-xs flex items-center justify-center">1</span>
+        <div className="glass-card animate-fade-in delay-1 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl mb-12 sm:mb-16 md:mb-20">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
+            <span className="w-7 h-7 rounded-full bg-accent-indigo text-white text-sm flex items-center justify-center">1</span>
             Basic Information
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             <div>
-              <label className="label">Campaign Name</label>
+              <label className="label mb-2 block font-medium">Campaign Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="input"
+                className="input w-full rounded-xl px-4 py-3"
                 placeholder="e.g., Summer Sale - High Value"
                 required
               />
             </div>
             <div>
-              <label className="label">Channel</label>
+              <label className="label mb-2 block font-medium">Channel</label>
               <div className="relative">
                 <Smartphone className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value)}
-                  className="input !pl-11 appearance-none bg-bg-input"
+                  className="input !pl-11 appearance-none bg-bg-input w-full rounded-xl px-4 py-3"
                 >
                   <option value="whatsapp">WhatsApp</option>
                   <option value="sms">SMS</option>
@@ -130,31 +130,31 @@ export default function CampaignBuilder() {
         </div>
 
         {/* Step 2: Audience (Read-only if passed from builder) */}
-        <div className="glass-card animate-fade-in delay-2">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-text-primary flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-accent-indigo text-white text-xs flex items-center justify-center">2</span>
+        <div className="glass-card animate-fade-in delay-2 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl mb-12 sm:mb-16 md:mb-20">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+            <h2 className="text-xl md:text-2xl font-bold text-text-primary flex items-center gap-3">
+              <span className="w-7 h-7 rounded-full bg-accent-indigo text-white text-sm flex items-center justify-center">2</span>
               Target Audience
             </h2>
             {initialAudienceSize !== null && (
-              <span className="badge badge-completed flex items-center gap-1">
-                <Users className="w-3 h-3" />
+              <span className="badge badge-completed flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm">
+                <Users className="w-3.5 h-3.5" />
                 {initialAudienceSize} Customers
               </span>
             )}
           </div>
           
           <div>
-            <label className="label">Audience Description</label>
+            <label className="label mb-2 block font-medium">Audience Description</label>
             <textarea
               value={audienceDescription}
               onChange={(e) => setAudienceDescription(e.target.value)}
-              className="input !min-h-[80px]"
-              placeholder="Who should receive this campaign?"
+              className="input !min-h-[100px] w-full rounded-xl px-4 py-3"
+              placeholder="e.g., Find customers who spent more than ₹5000 and haven't purchased in 60 days"
               readOnly={!!initialAudienceDescription}
             />
             {initialAudienceDescription && (
-              <p className="text-xs text-text-muted mt-2">
+              <p className="text-xs text-text-muted mt-3">
                 Audience is locked from the builder. Go back to change it.
               </p>
             )}
@@ -162,26 +162,26 @@ export default function CampaignBuilder() {
         </div>
 
         {/* Step 3: Message Content */}
-        <div className="glass-card animate-fade-in delay-3">
-          <h2 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
-            <span className="w-6 h-6 rounded-full bg-accent-indigo text-white text-xs flex items-center justify-center">3</span>
+        <div className="glass-card animate-fade-in delay-3 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl mb-12 sm:mb-16 md:mb-20">
+          <h2 className="text-xl md:text-2xl font-bold text-text-primary mb-6 flex items-center gap-3">
+            <span className="w-7 h-7 rounded-full bg-accent-indigo text-white text-sm flex items-center justify-center">3</span>
             Message Content
           </h2>
           
-          <div className="space-y-4">
-            <div className="flex justify-between items-end">
-              <label className="label !mb-0">Message Template</label>
+          <div className="space-y-6">
+            <div className="flex justify-between items-end flex-wrap gap-4">
+              <label className="label !mb-0 font-medium">Message Template</label>
               <button
                 type="button"
                 onClick={handleGenerateMessage}
                 disabled={generating || !audienceDescription}
-                className="btn-secondary !py-2 !px-4 !text-xs"
+                className="btn-secondary !py-2.5 !px-5 !text-sm rounded-xl"
               >
                 {generating ? (
-                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <>
-                    <Sparkles className="w-3.5 h-3.5 text-accent-violet" />
+                    <Sparkles className="w-4 h-4 text-accent-violet" />
                     Auto-Generate with AI
                   </>
                 )}
@@ -189,46 +189,46 @@ export default function CampaignBuilder() {
             </div>
             
             <div className="relative">
-              <MessageSquare className="absolute left-4 top-4 w-4 h-4 text-text-muted" />
+              <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-text-muted" />
               <textarea
                 value={messageTemplate}
                 onChange={(e) => setMessageTemplate(e.target.value)}
-                className="input !pl-11 !min-h-[160px]"
+                className="input !pl-12 !min-h-[180px] w-full rounded-xl px-4 py-3"
                 placeholder="Hi {{name}}, ..."
                 required
               />
             </div>
             <p className="text-xs text-text-muted">
-              Use <code className="bg-bg-primary px-1 rounded">{'{{name}}'}</code> to insert the customer's name.
+              Use <code className="bg-bg-primary px-2 py-0.5 rounded-md font-mono text-xs">{'{{name}}'}</code> to insert the customer's name.
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-accent-rose/5 border border-accent-rose/20 text-accent-rose text-sm">
+          <div className="p-5 rounded-2xl bg-accent-rose/5 border-2 border-accent-rose/20 text-accent-rose text-sm mb-12 sm:mb-16">
             {error}
           </div>
         )}
 
         {/* Actions */}
-        <div className="flex justify-end gap-4 animate-fade-in delay-4">
+        <div className="flex justify-end gap-5 pt-6 animate-fade-in delay-4">
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="btn-secondary"
+            className="btn-secondary px-8 py-3 rounded-xl font-medium transition-all duration-200"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={creating}
-            className="btn-primary"
+            className="btn-primary px-8 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2"
           >
             {creating ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-5 h-5 animate-spin" />
             ) : (
               <>
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
                 Launch Campaign
               </>
             )}

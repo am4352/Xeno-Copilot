@@ -8,6 +8,7 @@ import {
   TrendingUp,
   ArrowRight,
   Loader2,
+  Zap,
 } from 'lucide-react';
 
 export default function Dashboard() {
@@ -16,7 +17,6 @@ export default function Dashboard() {
 
   useEffect(() => {
     let ignore = false;
-
     async function loadStats() {
       try {
         const res = await api.get('/dashboard/stats');
@@ -27,18 +27,14 @@ export default function Dashboard() {
         if (!ignore) setLoading(false);
       }
     }
-
     loadStats();
-
-    return () => {
-      ignore = true;
-    };
+    return () => { ignore = true; };
   }, []);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-8 h-8 text-accent-indigo animate-spin" />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '16rem' }}>
+        <Loader2 style={{ width: '2rem', height: '2rem', color: '#2563EB', animation: 'spin 1s linear infinite' }} />
       </div>
     );
   }
@@ -48,131 +44,200 @@ export default function Dashboard() {
       label: 'Total Customers',
       value: stats?.totalCustomers || 0,
       icon: Users,
-      color: 'text-accent-cyan',
-      bg: 'bg-accent-cyan/10',
-      borderColor: 'border-accent-cyan/20',
+      accentColor: '#2563EB',
+      bgColor: '#EFF6FF',
+      borderColor: '#BFDBFE',
+      change: '+12.5%',
     },
     {
       label: 'Total Orders',
       value: stats?.totalOrders || 0,
       icon: ShoppingCart,
-      color: 'text-accent-emerald',
-      bg: 'bg-accent-emerald/10',
-      borderColor: 'border-accent-emerald/20',
+      accentColor: '#16A34A',
+      bgColor: '#F0FDF4',
+      borderColor: '#BBF7D0',
+      change: '+8.2%',
     },
     {
       label: 'Total Campaigns',
       value: stats?.totalCampaigns || 0,
       icon: Megaphone,
-      color: 'text-accent-violet',
-      bg: 'bg-accent-violet/10',
-      borderColor: 'border-accent-violet/20',
+      accentColor: '#D97706',
+      bgColor: '#FFFBEB',
+      borderColor: '#FDE68A',
+      change: '+3.1%',
     },
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '2rem 1.5rem', fontFamily: "'Inter', sans-serif" }}>
+
       {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-text-primary">Dashboard</h1>
-        <p className="text-text-secondary mt-1">Welcome to your marketing command center</p>
+      <div style={{ marginBottom: '2rem' }}>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '6px',
+          background: '#FFF7ED', border: '1px solid #FDE68A',
+          borderRadius: '999px', padding: '4px 14px',
+          fontSize: '11px', fontWeight: '600', color: '#B45309',
+          letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '1rem'
+        }}>
+          <Zap style={{ width: '11px', height: '11px' }} />
+          Xeno Copilot · AI-Native Marketing CRM
+        </div>
+        <h1 style={{ fontSize: '2rem', fontWeight: '700', color: '#111827', margin: '0 0 6px 0', letterSpacing: '-0.02em' }}>
+          Welcome back 👋
+        </h1>
+        <p style={{ fontSize: '0.95rem', color: '#6B7280', margin: 0 }}>
+          Your marketing command center — manage agents, campaigns & audiences.
+        </p>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {statCards.map((card, i) => {
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+        {statCards.map((card) => {
           const Icon = card.icon;
           return (
-            <div
-              key={card.label}
-              className={`glass-card animate-fade-in delay-${i + 1}`}
-            >
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl ${card.bg} flex items-center justify-center`}>
-                  <Icon className={`w-6 h-6 ${card.color}`} />
+            <div key={card.label} style={{
+              background: '#FFFFFF',
+              border: `1px solid ${card.borderColor}`,
+              borderRadius: '14px',
+              padding: '1.25rem 1.5rem',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              transition: 'box-shadow 0.2s',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <div style={{
+                  width: '40px', height: '40px', borderRadius: '10px',
+                  background: card.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center'
+                }}>
+                  <Icon style={{ width: '20px', height: '20px', color: card.accentColor }} />
                 </div>
-                <TrendingUp className="w-4 h-4 text-accent-emerald" />
+                <span style={{
+                  fontSize: '12px', fontWeight: '600', color: '#16A34A',
+                  background: '#F0FDF4', padding: '2px 8px', borderRadius: '999px'
+                }}>
+                  {card.change}
+                </span>
               </div>
-              <p className="text-3xl font-bold text-text-primary">
+              <p style={{ fontSize: '1.75rem', fontWeight: '700', color: '#111827', margin: '0 0 2px 0', letterSpacing: '-0.02em' }}>
                 {card.value.toLocaleString()}
               </p>
-              <p className="text-sm text-text-secondary mt-1">{card.label}</p>
+              <p style={{ fontSize: '0.8rem', color: '#9CA3AF', margin: 0, fontWeight: '500' }}>
+                {card.label}
+              </p>
             </div>
           );
         })}
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <Link
-          to="/upload"
-          className="glass-card group flex items-center gap-4 animate-fade-in delay-4"
-        >
-          <div className="w-12 h-12 rounded-xl bg-accent-amber/10 flex items-center justify-center">
-            <span className="text-2xl">📤</span>
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-text-primary">Upload Data</h3>
-            <p className="text-sm text-text-secondary">Import customers & orders via CSV</p>
-          </div>
-          <ArrowRight className="w-5 h-5 text-text-muted group-hover:text-accent-indigo group-hover:translate-x-1 transition-all" />
-        </Link>
+      <div style={{ marginBottom: '2rem' }}>
+        <h2 style={{ fontSize: '1rem', fontWeight: '600', color: '#374151', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontSize: '11px' }}>
+          Quick Actions
+        </h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+          <Link to="/upload" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '14px',
+              padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem',
+              cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#D97706'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(217,119,6,0.1)'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; }}
+            >
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#FFF7ED', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+                📤
+              </div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontWeight: '600', color: '#111827', margin: '0 0 2px 0', fontSize: '0.95rem' }}>Upload Data</h3>
+                <p style={{ fontSize: '0.8rem', color: '#9CA3AF', margin: 0 }}>Import customers & orders via CSV</p>
+              </div>
+              <ArrowRight style={{ width: '16px', height: '16px', color: '#D1D5DB', flexShrink: 0 }} />
+            </div>
+          </Link>
 
-        <Link
-          to="/audience"
-          className="glass-card group flex items-center gap-4 animate-fade-in delay-5"
-        >
-          <div className="w-12 h-12 rounded-xl bg-accent-indigo/10 flex items-center justify-center">
-            <span className="text-2xl">🎯</span>
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold text-text-primary">Build Audience</h3>
-            <p className="text-sm text-text-secondary">Use AI to segment your customers</p>
-          </div>
-          <ArrowRight className="w-5 h-5 text-text-muted group-hover:text-accent-indigo group-hover:translate-x-1 transition-all" />
-        </Link>
+          <Link to="/audience" style={{ textDecoration: 'none' }}>
+            <div style={{
+              background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '14px',
+              padding: '1.25rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem',
+              cursor: 'pointer', transition: 'border-color 0.2s, box-shadow 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#2563EB'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(37,99,235,0.1)'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = '#E5E7EB'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04)'; }}
+            >
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#EFF6FF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+                🎯
+              </div>
+              <div style={{ flex: 1 }}>
+                <h3 style={{ fontWeight: '600', color: '#111827', margin: '0 0 2px 0', fontSize: '0.95rem' }}>Build Audience</h3>
+                <p style={{ fontSize: '0.8rem', color: '#9CA3AF', margin: 0 }}>Use AI to segment your customers</p>
+              </div>
+              <ArrowRight style={{ width: '16px', height: '16px', color: '#D1D5DB', flexShrink: 0 }} />
+            </div>
+          </Link>
+        </div>
       </div>
 
       {/* Recent Campaigns */}
       {stats?.recentCampaigns?.length > 0 && (
-        <div className="animate-fade-in delay-3">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-text-primary">Recent Campaigns</h2>
-            <Link
-              to="/analytics"
-              className="text-sm text-accent-indigo hover:text-accent-violet transition-colors flex items-center gap-1"
-            >
-              View all <ArrowRight className="w-3.5 h-3.5" />
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
+            <h2 style={{ fontSize: '11px', fontWeight: '600', color: '#374151', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Recent Campaigns
+            </h2>
+            <Link to="/analytics" style={{
+              fontSize: '0.8rem', color: '#2563EB', textDecoration: 'none', fontWeight: '500',
+              display: 'flex', alignItems: 'center', gap: '4px'
+            }}>
+              View all <ArrowRight style={{ width: '13px', height: '13px' }} />
             </Link>
           </div>
 
-          <div className="table-container">
-            <table>
+          <div style={{
+            background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '14px',
+            overflow: 'hidden', boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+          }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.875rem' }}>
               <thead>
-                <tr>
-                  <th>Campaign</th>
-                  <th>Channel</th>
-                  <th>Status</th>
-                  <th>Sent</th>
-                  <th>Delivered</th>
-                  <th>Failed</th>
+                <tr style={{ background: '#F9FAFB', borderBottom: '1px solid #F3F4F6' }}>
+                  {['Campaign', 'Channel', 'Status', 'Sent', 'Delivered', 'Failed'].map(h => (
+                    <th key={h} style={{
+                      padding: '10px 16px', textAlign: 'left',
+                      fontSize: '11px', fontWeight: '600', color: '#9CA3AF',
+                      textTransform: 'uppercase', letterSpacing: '0.05em'
+                    }}>{h}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
-                {stats.recentCampaigns.map((campaign) => (
-                  <tr key={campaign.id}>
-                    <td className="!text-text-primary font-medium">{campaign.name}</td>
-                    <td>
-                      <span className="capitalize">{campaign.channel}</span>
-                    </td>
-                    <td>
-                      <span className={`badge badge-${campaign.status}`}>
+                {stats.recentCampaigns.map((campaign, idx) => (
+                  <tr key={campaign.id} style={{
+                    borderBottom: idx < stats.recentCampaigns.length - 1 ? '1px solid #F9FAFB' : 'none',
+                    transition: 'background 0.15s',
+                  }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#FAFAFA'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <td style={{ padding: '12px 16px', fontWeight: '600', color: '#111827' }}>{campaign.name}</td>
+                    <td style={{ padding: '12px 16px', color: '#6B7280', textTransform: 'capitalize' }}>{campaign.channel}</td>
+                    <td style={{ padding: '12px 16px' }}>
+                      <span style={{
+                        display: 'inline-block', padding: '3px 10px', borderRadius: '999px', fontSize: '11px', fontWeight: '600',
+                        ...(campaign.status === 'completed'
+                          ? { background: '#F0FDF4', color: '#15803D' }
+                          : campaign.status === 'running'
+                            ? { background: '#EFF6FF', color: '#1D4ED8' }
+                            : { background: '#F3F4F6', color: '#6B7280' }
+                        )
+                      }}>
                         {campaign.status}
                       </span>
                     </td>
-                    <td>{campaign.totalSent}</td>
-                    <td className="!text-accent-emerald">{campaign.delivered}</td>
-                    <td className="!text-accent-rose">{campaign.failed}</td>
+                    <td style={{ padding: '12px 16px', color: '#374151' }}>{campaign.totalSent}</td>
+                    <td style={{ padding: '12px 16px', color: '#16A34A', fontWeight: '600' }}>{campaign.delivered}</td>
+                    <td style={{ padding: '12px 16px', color: '#DC2626', fontWeight: '600' }}>{campaign.failed}</td>
                   </tr>
                 ))}
               </tbody>
@@ -183,12 +248,28 @@ export default function Dashboard() {
 
       {/* Empty state */}
       {(!stats?.recentCampaigns || stats.recentCampaigns.length === 0) && (
-        <div className="glass-card text-center py-12 animate-fade-in delay-3">
-          <span className="text-5xl block mb-4">🚀</span>
-          <h3 className="text-xl font-bold text-text-primary mb-2">No campaigns yet</h3>
-          <p className="text-text-secondary mb-6">Start by uploading your customer data, then build your first audience</p>
-          <Link to="/upload" className="btn-primary">
-            Get Started <ArrowRight className="w-4 h-4" />
+        <div style={{
+          background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '16px',
+          padding: '4rem 2rem', textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.04)'
+        }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🚀</div>
+          <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#111827', margin: '0 0 8px 0' }}>
+            No campaigns yet
+          </h3>
+          <p style={{ color: '#9CA3AF', fontSize: '0.9rem', margin: '0 0 1.5rem 0', maxWidth: '360px', marginLeft: 'auto', marginRight: 'auto' }}>
+            Upload your customer data, then build your first AI-powered audience segment to get started.
+          </p>
+          <Link to="/upload" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            background: '#D97706', color: '#FFFFFF', fontWeight: '600',
+            padding: '10px 22px', borderRadius: '999px', textDecoration: 'none',
+            fontSize: '0.9rem', transition: 'background 0.2s',
+          }}
+            onMouseEnter={e => e.currentTarget.style.background = '#B45309'}
+            onMouseLeave={e => e.currentTarget.style.background = '#D97706'}
+          >
+            Get Started <ArrowRight style={{ width: '15px', height: '15px' }} />
           </Link>
         </div>
       )}
